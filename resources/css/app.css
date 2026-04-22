@@ -1,0 +1,235 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    body {
+        @apply bg-slate-50 text-slate-800 font-sans antialiased selection:bg-primary-200 selection:text-primary-900;
+    }
+}
+
+@layer components {
+    /* === BUTTONS === */
+    .btn-primary {
+        @apply inline-flex items-center justify-center px-4 py-2 bg-primary-600 border border-transparent rounded-lg font-semibold text-white tracking-wide text-sm hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 transition-all duration-200 shadow-sm active:scale-95;
+    }
+
+    .btn-secondary {
+        @apply inline-flex items-center justify-center px-4 py-2 bg-white border border-slate-300 rounded-lg font-semibold text-slate-700 tracking-wide text-sm hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-slate-500 focus:ring-offset-2 transition-all duration-200 shadow-sm active:scale-95;
+    }
+
+    .btn-danger {
+        @apply inline-flex items-center justify-center px-4 py-2 bg-red-600 border border-transparent rounded-lg font-semibold text-white tracking-wide text-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition-all duration-200 shadow-sm active:scale-95;
+    }
+    
+    .btn-success {
+        @apply inline-flex items-center justify-center px-4 py-2 bg-green-600 border border-transparent rounded-lg font-semibold text-white tracking-wide text-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-all duration-200 shadow-sm active:scale-95;
+    }
+
+    .btn-icon {
+        @apply p-2 rounded-lg transition-colors duration-200 flex items-center justify-center text-slate-500 hover:text-slate-800 hover:bg-slate-100;
+    }
+
+    /* === CARDS & CONTAINERS === */
+    .card {
+        @apply bg-white border border-slate-200 rounded-xl shadow-card transition-shadow duration-300;
+    }
+    
+    .card-product {
+        @apply bg-white border border-slate-200 rounded-xl shadow-card hover:shadow-card-hover transition-all duration-300 transform hover:-translate-y-1;
+    }
+
+    /* === FORMS === */
+    .form-label {
+        @apply block font-semibold text-xs uppercase tracking-widest text-slate-500 mb-2;
+    }
+
+    .form-input-clean {
+        @apply w-full px-4 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-900 placeholder-slate-400 focus:border-primary-400 focus:ring-2 focus:ring-primary-500/5 transition-all duration-200 shadow-sm;
+    }
+
+    /* Hide number input arrows */
+    input[type=number]::-webkit-inner-spin-button, 
+    input[type=number]::-webkit-outer-spin-button { 
+        -webkit-appearance: none; 
+        margin: 0; 
+    }
+    input[type=number] {
+        -moz-appearance: textfield;
+    }
+
+    .form-select-clean {
+        @apply w-full px-4 py-2.5 bg-white border border-slate-200 rounded-xl text-slate-900 focus:border-primary-400 focus:ring-2 focus:ring-primary-500/5 transition-all duration-200 shadow-sm appearance-none;
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%2364748b' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+        background-position: right 0.75rem center;
+        background-repeat: no-repeat;
+        background-size: 1.5em 1.5em;
+        padding-right: 2.5rem;
+    }
+
+    .form-textarea-clean {
+        @apply w-full px-4 py-3 bg-white border border-slate-200 rounded-xl text-slate-900 placeholder-slate-400 focus:border-primary-400 focus:ring-2 focus:ring-primary-500/5 transition-all duration-200 shadow-sm resize-y;
+    }
+
+    /* Drag & Drop States */
+    .upload-zone {
+        @apply mt-2 flex justify-center px-6 pt-5 pb-6 border-2 border-slate-200 border-dashed rounded-2xl transition-all duration-300 bg-white;
+    }
+
+    .upload-zone.drag-over {
+        @apply border-primary-500 bg-primary-50/50 scale-[1.01] shadow-lg shadow-primary-500/10;
+    }
+
+    .form-error {
+        @apply text-xs text-primary-600 font-medium mt-1.5 ml-1 flex items-center gap-1;
+    }
+
+    /* === CUSTOM SCROLLBAR === */
+    .custom-scrollbar::-webkit-scrollbar {
+        @apply w-1.5;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+        @apply bg-transparent;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+        @apply bg-slate-200 rounded-full hover:bg-slate-300 transition-colors;
+    }
+
+    /* Custom Select Tweaks */
+    .custom-select-list-item {
+        @apply w-full text-left px-4 py-2.5 text-sm transition-all duration-150 flex items-center justify-between;
+    }
+
+    /* === FEEDBACK & LOADING === */
+    .click-shield {
+        @apply fixed inset-0 z-[9999] cursor-wait bg-transparent;
+    }
+
+    .loading-spinner {
+        @apply w-5 h-5 border-2 border-slate-200 border-t-white rounded-full animate-spin;
+    }
+
+    @keyframes toast-progress {
+        from { transform: scaleX(1); }
+        to { transform: scaleX(0); }
+    }
+
+    .animate-toast-progress {
+        transform-origin: left;
+        animation: toast-progress 5s linear forwards;
+    }
+
+    /* === TABLES === */
+    .table-container {
+        @apply w-full overflow-x-auto bg-white rounded-xl shadow-card border border-slate-200;
+    }
+
+    .table-clean {
+        @apply w-full text-sm text-left text-slate-600;
+    }
+
+    .table-clean thead {
+        @apply text-xs uppercase bg-slate-50 text-slate-500 border-b border-slate-200;
+    }
+
+    .table-clean th {
+        @apply px-6 py-4 font-semibold tracking-wider whitespace-nowrap;
+    }
+
+    .table-clean td {
+        @apply px-6 py-4 border-b border-slate-100 align-middle;
+    }
+
+    .table-clean tbody tr {
+        @apply hover:bg-slate-50 transition-colors;
+    }
+
+    .table-clean tbody tr:last-child td {
+        @apply border-b-0;
+    }
+
+    /* === BADGES === */
+    .badge {
+        @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold border;
+    }
+
+    .badge-success {
+        @apply bg-green-50 text-green-700 border-green-200;
+    }
+
+    .badge-warning {
+        @apply bg-yellow-50 text-yellow-700 border-yellow-200;
+    }
+
+    .badge-danger {
+        @apply bg-red-50 text-red-700 border-red-200;
+    }
+
+    .badge-info {
+        @apply bg-blue-50 text-blue-700 border-blue-200;
+    }
+    
+    .badge-neutral {
+        @apply bg-slate-100 text-slate-700 border-slate-200;
+    }
+}
+
+/* === ANIMATIONS & MIXINS === */
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-slide-up {
+    animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Staggered load for product grid */
+.product-grid > div {
+    opacity: 0;
+    animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.stagger-1 { animation-delay: 50ms; }
+.stagger-2 { animation-delay: 100ms; }
+.stagger-3 { animation-delay: 150ms; }
+.stagger-4 { animation-delay: 200ms; }
+.stagger-5 { animation-delay: 250ms; }
+.stagger-6 { animation-delay: 300ms; }
+.stagger-7 { animation-delay: 350ms; }
+.stagger-8 { animation-delay: 400ms; }
+
+/* Scrollbar Customization */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+::-webkit-scrollbar-track {
+    background: #f8fafc; 
+}
+::-webkit-scrollbar-thumb {
+    background: #cbd5e1; 
+    border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8; 
+}
+
+/* Pagination Overrides */
+.pagination-clean nav {
+    @apply flex justify-center items-center space-x-1;
+}
+
+.pagination-clean .page-item.active .page-link {
+    @apply z-10 bg-primary-600 border-primary-600 text-white font-medium;
+}
+
+.pagination-clean .page-link {
+    @apply px-3 py-1.5 bg-white border border-slate-300 text-slate-600 hover:bg-slate-50 transition-colors rounded-md shadow-sm;
+}
+
+.pagination-clean .page-item.disabled .page-link {
+    @apply bg-slate-50 border-slate-200 text-slate-400 cursor-not-allowed shadow-none;
+}
