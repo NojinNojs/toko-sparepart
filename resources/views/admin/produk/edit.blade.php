@@ -179,18 +179,21 @@
                         {{-- Tipe Kendaraan --}}
                         <div>
                             <x-input-label for="tipe_kendaraan" value="Tipe Kendaraan" />
-                            <select id="tipe_kendaraan" name="tipe_kendaraan" class="form-select-clean">
-                                <option value="">-- Pilih Tipe Kendaraan --</option>
-                                @foreach(\App\Models\Produk::TIPE_KENDARAAN as $value => $label)
-                                    <option value="{{ $value }}"
-                                        {{ old('tipe_kendaraan', $produk->tipe_kendaraan) === $value ? 'selected' : '' }}>
-                                        {{ $label }}
-                                    </option>
-                                @endforeach
-                            </select>
+                            {{--
+                                :selected → nilai yang sudah tersimpan di database ($produk->tipe_kendaraan).
+                                old() dipakai jika ada validation error — kembali ke nilai yang baru dikirim.
+                            --}}
+                            <x-custom-select
+                                name="tipe_kendaraan"
+                                id="tipe_kendaraan"
+                                :options="collect(\App\Models\Produk::TIPE_KENDARAAN)->map(fn($label, $value) => ['id' => $value, 'nama' => $label])->values()"
+                                :selected="old('tipe_kendaraan', $produk->tipe_kendaraan)"
+                                placeholder="Pilih tipe kendaraan..."
+                            />
                             @error('tipe_kendaraan') <p class="form-error"><svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path></svg> {{ $message }}</p> @enderror
                         </div>
                     </div>
+
 
                     {{-- Deskripsi --}}
                     <div>
