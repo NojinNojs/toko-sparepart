@@ -12,10 +12,18 @@ use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;
 
+/**
+ * DashboardController — menampilkan ringkasan data seluruh aplikasi.
+ *
+ * Prinsip DRY (Don't Repeat Yourself) diterapkan di sini:
+ * Baik index() maupun poll() menggunakan getDashboardData() yang sama,
+ * sehingga tidak ada duplikasi logika pengambilan data.
+ */
 class DashboardController extends Controller
 {
     /**
-     * Menampilkan halaman dashboard admin dengan ringkasan statistik lengkap.
+     * Menampilkan halaman dashboard admin (request pertama kali / full page load).
+     * Data dikirim ke view via $data array yang di-unpack oleh view().
      */
     public function index(): View
     {
@@ -25,8 +33,12 @@ class DashboardController extends Controller
     }
 
     /**
-     * API endpoint untuk polling data dashboard secara realtime.
-     * Dipanggil oleh Alpine.js setiap 15 detik.
+     * API endpoint untuk polling data dashboard secara realtime (AJAX).
+     *
+     * Dipanggil oleh Alpine.js setiap 15 detik via fetch('/admin/dashboard/poll').
+     * Return JSON — data yang sama dengan index(), tapi diformat ulang karena
+     * beberapa object Eloquent tidak bisa langsung di-JSON-kan (perlu di-map dulu).
+     * Contoh: Carbon object (created_at) dikonversi ke string 'diffForHumans()' → "5 menit lalu".
      */
     public function poll(): JsonResponse
     {
@@ -64,7 +76,12 @@ class DashboardController extends Controller
     }
 
     /**
-     * Mengambil semua data yang dibutuhkan dashboard.
+     * Mengambil SEMUA data yang dibutuhkan dashboard dalam satu method.
+     *
+     * Dipanggil oleh index() → untuk render HTML
+     * Dipanggil oleh poll() → untuk return JSON ke Alpine.js
+     *
+     * Return type: array — di-unpack oleh view() atau di-encode sebagai JSON.
      */
     private function getDashboardData(): array
     {
@@ -82,15 +99,18 @@ class DashboardController extends Controller
         ];
 
         // --- Chart: Pendapatan 7 Hari Terakhir ---
+        // Loop dari 6 hari lalu sampai hari ini (i=6 → i=0), menghasilkan array 7 elemen.
+        // Carbon::today()->subDays($i) → objek tanggal, misal: subDays(2) = 2 hari lalu.
+        // Setiap iterasi jalankan 1 query SUM → total 7 query (akses dashboard admin, wajar).
         $chartPendapatan = collect();
         for ($i = 6; $i >= 0; $i--) {
             $date = Carbon::today()->subDays($i);
             $amount = Pembelian::where('status', 'dikonfirmasi')
-                ->whereDate('created_at', $date)
-                ->sum('total');
+                ->whereDate('created_at', $date) // Hanya transaksi di tanggal tersebut
+                ->sum('total');                   // Jumlahkan kolom total
             $chartPendapatan->push([
-                'label' => $date->format('d M'),
-                'value' => (int) $amount,
+                'label' => $date->format('d M'), // Format: "28 Apr"
+                'value' => (int) $amount,         // Cast ke int (tidak perlu desimal di chart)
             ]);
         }
 
@@ -115,6 +135,23 @@ class DashboardController extends Controller
             ->get();
 
         // --- Produk Terlaris ---
+        // Query ini menggunakan LEFT JOIN + SUM + COALESCE:
+        //
+        // LEFT JOIN → ambil SEMUA produk, bahkan yang belum pernah dibeli
+        //            (jika INNER JOIN, produk tanpa pembelian tidak akan muncul)
+        //
+        // COALESCE(SUM(...), 0) → jika produk tidak punya pembelian (NULL dari LEFT JOIN),
+        //                         ganti NULL dengan 0 agar bisa diurutkan
+        //
+        // groupBy('produk.id') → wajib saat menggunakan aggregate function (SUM)
+        //
+        // SQL yang dihasilkan (kira-kira):
+        //   SELECT produk.*, COALESCE(SUM(pembelian.jumlah), 0) as total_terjual
+        //   FROM produk
+        //   LEFT JOIN pembelian ON produk.id = pembelian.produk_id AND pembelian.status = 'dikonfirmasi'
+        //   GROUP BY produk.id
+        //   ORDER BY total_terjual DESC
+        //   LIMIT 5
         $produkTerlaris = Produk::select('produk.*')
             ->selectRaw('COALESCE(SUM(pembelian.jumlah), 0) as total_terjual')
             ->leftJoin('pembelian', function ($join) {

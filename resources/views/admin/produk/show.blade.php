@@ -81,6 +81,16 @@
                         </div>
                     </div>
                     <div class="bg-slate-50 rounded-xl p-4 border border-slate-100">
+                        <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider mb-1.5">Tipe Kendaraan</p>
+                        <div class="flex items-center gap-2">
+                            <svg class="w-4 h-4 text-slate-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/></svg>
+                            <span class="font-bold text-slate-700">
+                                {{ \App\Models\Produk::TIPE_KENDARAAN[$produk->tipe_kendaraan] ?? 'Tidak ditentukan' }}
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-50 rounded-xl p-4 border border-slate-100">
                         <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider mb-1.5">Tanggal Ditambahkan</p>
                         <p class="font-medium text-slate-700">{{ $produk->created_at->format('d M Y, H:i') }}</p>
                     </div>
