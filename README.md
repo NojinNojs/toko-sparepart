@@ -1,18 +1,16 @@
-# 🛠️ Toko Sparepart Otomotif (Production Ready)
+# Toko Sparepart Otomotif
 
-A premium, production-grade e-commerce application for automotive spare parts built with **Laravel 12 (Blade)** and **Tailwind CSS 4**.
+Online catalog and admin dashboard for an automotive spare parts store, built with Laravel and Tailwind CSS.
 
 ## ✨ Overview & Features
 
-A robust application crafted specifically for high-performance and a premium user experience.
-
 - **Admin Dashboard**: Comprehensive management of products, brands, and categories.
-- **Product Catalog**: Beautifully designed responsive grid with filtering and search.
+- **Product Catalog**: Product grid with category filtering and search.
 - **Image Cropper**: Integrated Cropper.js for uniform 1:1 square product images.
 - **Image Optimization**: Automatic resizing and web compression using PHP GD Library.
 - **Responsive Design**: Mobile-first architecture using Tailwind CSS 4.
 - **Role-Based Access**: Secure separation between Admin and Customer roles.
-- **Transaction System**: Clean, intuitive, and secure checkout flow.
+- **Transaction System**: Customer checkout and order management.
 
 ## 🚀 Tech Stack
 
